@@ -1,9 +1,9 @@
 import spacy
 from spacy.training import Example
-import random
 import nltk
 from nltk.corpus import reuters
 import torch
+import secrets
 
 def save_spacy_model_as_torch(nlp, model_dir="models/reuters"):
     # Extract the TextCategorizer component
@@ -64,10 +64,10 @@ def train_and_save_reuters_model(model_dir="models/reuters"):
     nlp.initialize(lambda: train_examples)
 
     # Train the model
-    random.seed(1)
+    secrets.SystemRandom().seed(1)
     spacy.util.fix_random_seed(1)
     for i in range(5):  # Adjust iterations for better accuracy
-        random.shuffle(train_examples)
+        secrets.SystemRandom().shuffle(train_examples)
         losses = {}
         # Create batches of data
         batches = spacy.util.minibatch(train_examples, size=8)
@@ -108,11 +108,11 @@ def train_model(model_dir, additional_epochs=0):
         print("Continuing training with existing model.")
 
     # Train the model
-    random.seed(1)
+    secrets.SystemRandom().seed(1)
     spacy.util.fix_random_seed(1)
     num_epochs = 5 + additional_epochs
     for i in range(num_epochs):
-        random.shuffle(train_examples)
+        secrets.SystemRandom().shuffle(train_examples)
         losses = {}
         batches = spacy.util.minibatch(train_examples, size=8)
         for batch in batches:
